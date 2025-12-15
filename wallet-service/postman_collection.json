@@ -1,0 +1,241 @@
+{
+  "info": {
+    "name": "Wallet Service API",
+    "description": "API collection for the Novacrust Wallet Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "walletId1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "walletId2",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Wallet (Default)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currency\": \"USD\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/wallets",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Create Wallet (With Initial Balance)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currency\": \"USD\",\n  \"initialBalance\": 100\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/wallets",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Fund Wallet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 500,\n  \"idempotencyKey\": \"fund-001\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/wallets/{{walletId1}}/fund",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets", "{{walletId1}}", "fund"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Fund Wallet (Duplicate Idempotency - Should Fail)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 500,\n  \"idempotencyKey\": \"fund-001\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/wallets/{{walletId1}}/fund",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets", "{{walletId1}}", "fund"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Transfer Between Wallets",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fromWalletId\": \"{{walletId1}}\",\n  \"toWalletId\": \"{{walletId2}}\",\n  \"amount\": 100,\n  \"idempotencyKey\": \"transfer-001\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/wallets/transfer",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets", "transfer"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Transfer - Insufficient Balance (Should Fail)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fromWalletId\": \"{{walletId1}}\",\n  \"toWalletId\": \"{{walletId2}}\",\n  \"amount\": 999999\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/wallets/transfer",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets", "transfer"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Transfer - Same Wallet (Should Fail)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fromWalletId\": \"{{walletId1}}\",\n  \"toWalletId\": \"{{walletId1}}\",\n  \"amount\": 50\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/wallets/transfer",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets", "transfer"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8. Get All Wallets",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/wallets",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9. Get Wallet Details with Transactions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/wallets/{{walletId1}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets", "{{walletId1}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Get Non-Existent Wallet (Should Fail)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/wallets/non-existent-id",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets", "non-existent-id"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "11. Fund Wallet - Invalid Amount (Should Fail)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": -100\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/wallets/{{walletId1}}/fund",
+          "host": ["{{baseUrl}}"],
+          "path": ["wallets", "{{walletId1}}", "fund"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
