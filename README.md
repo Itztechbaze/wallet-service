@@ -94,8 +94,8 @@ Response:
     "id": "uuid",
     "currency": "USD",
     "balance": 0,
-    "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "createdAt": "2025-12-15T00:00:00.000Z",
+    "updatedAt": "2025-12-15T00:00:00.000Z"
   }
 }
 ```
